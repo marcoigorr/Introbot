@@ -2,7 +2,7 @@ import os
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
-import youtube_dl
+from discord import FFmpegPCMAudio
 
 import responses
 
@@ -51,7 +51,7 @@ def run_discord_bot():
 
         log(f'{client.user} is connected to these guilds -> {servers}')
 
-        log(f'{client.user} is connected to {guild.name}(id: {guild.id})')
+        log(f'{client.user} is connected to {guild.name} (id: {guild.id})')
 
     @client.event
     async def on_message(message):
@@ -73,10 +73,12 @@ def run_discord_bot():
         await ctx.send('Ciao')
 
     @client.command(pass_context=True)
-    async def play(ctx, url:str):
+    async def play(ctx):
         if ctx.author.voice:
             channel = ctx.message.author.voice.channel
             voice = await channel.connect()
+            source = FFmpegPCMAudio('audio/Intro.wav')
+            player = voice.play(source)
 
         else:
             await ctx.send('Non sei connesso a nessun canale vocale.')
@@ -88,5 +90,13 @@ def run_discord_bot():
             await ctx.send('Ho lasciato il canale vocale')
         else:
             await ctx.send('Non sono in un canale vocale')
+
+    @client.event
+    async def on_voice_state_update(member, before, after):
+        if not before.channel and after.channel and member.id == 425283882628284416:  # marcoigorr
+            channel = client.get_channel(962076175180632105)  # general
+            voice = await channel.connect()
+            source = FFmpegPCMAudio('audio/Intro.wav')
+            player = voice.play(source)
 
     client.run(_token)
