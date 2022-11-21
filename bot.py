@@ -27,6 +27,7 @@ async def send_message(message):
     try:
         response = responses.handle_response(message)
         await message.channel.send(response)
+
     except Exception as e:
         pass
 
@@ -69,8 +70,13 @@ def run_discord_bot():
         await client.process_commands(message)
 
     @client.command()
-    async def hello(ctx):
-        await ctx.send('Ciao')
+    async def help(ctx):
+        embed = discord.Embed(
+            title="Introbot", url="https://github.com/marcoigorr/Introbot",
+            description="Ciao sono Introbot! Il bot creato per **Emer**", color=discord.Color.blue()
+        )
+
+        await ctx.channel.send_message(embed=embed)
 
     @client.command(pass_context=True)
     async def play(ctx):
@@ -87,7 +93,7 @@ def run_discord_bot():
     async def leave(ctx):
         if ctx.voice_client:
             await ctx.guild.voice_client.disconnect()
-            await ctx.send('Ho lasciato il canale vocale')
+
         else:
             await ctx.send('Non sono in un canale vocale')
 
