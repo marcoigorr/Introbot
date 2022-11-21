@@ -26,7 +26,11 @@ def log(label):
 async def send_message(message):
     try:
         response = responses.handle_response(message)
-        await message.channel.send(response)
+
+        if isinstance(response, discord.Embed):
+            await message.channel.send(embed=response)
+        else:
+            await message.channel.send(response)
 
     except Exception as e:
         pass
@@ -71,12 +75,15 @@ def run_discord_bot():
 
     @client.command()
     async def help(ctx):
-        embed = discord.Embed(
-            title="Introbot", url="https://github.com/marcoigorr/Introbot",
-            description="Ciao sono Introbot! Il bot creato per **Emer**", color=discord.Color.blue()
-        )
+        await send_message(ctx)
 
-        await ctx.channel.send_message(embed=embed)
+    @client.event
+    async def on_voice_state_update(member, before, after):
+        if not before.channel and after.channel and member.id == 425283882628284416:  # marcoigorr
+            channel = client.get_channel(962076175180632105)  # general
+            voice = await channel.connect()
+            source = FFmpegPCMAudio('audio/Intro.wav')
+            player = voice.play(source)
 
     @client.command(pass_context=True)
     async def play(ctx):
@@ -96,13 +103,5 @@ def run_discord_bot():
 
         else:
             await ctx.send('Non sono in un canale vocale')
-
-    @client.event
-    async def on_voice_state_update(member, before, after):
-        if not before.channel and after.channel and member.id == 425283882628284416:  # marcoigorr
-            channel = client.get_channel(962076175180632105)  # general
-            voice = await channel.connect()
-            source = FFmpegPCMAudio('audio/Intro.wav')
-            player = voice.play(source)
 
     client.run(_token)
