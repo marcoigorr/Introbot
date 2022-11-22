@@ -2,7 +2,7 @@
 
 Discord Bot programmato con python
 
-## Obbiettivo
+## Scopo
 
 Intro per l'entrata di Emer in chat vocale
 
