@@ -4,6 +4,7 @@ from discord.ext import commands
 from dotenv import load_dotenv
 from discord import FFmpegPCMAudio
 from datetime import datetime
+import asyncio
 
 import responses
 
@@ -80,11 +81,18 @@ def run_discord_bot():
 
     @client.event
     async def on_voice_state_update(member, before, after):
-        if not before.channel and after.channel and member.id == 436886851605889036:  # Emer ID
-            channel = client.get_channel(702594762095591424)  # gente che parla 1
+        if not before.channel and after.channel and (member.id == 436886851605889036 or member.id == 425283882628284416):  # Emer ID e marcoigorr
+            channel = client.get_channel(962076175180632105)  # gente che parla 1 702594762095591424
             voice = await channel.connect()
             source = FFmpegPCMAudio('audio/Intro.wav')
             player = voice.play(source)
+
+            while True:
+                await asyncio.sleep(1)
+                if voice.is_playing() or voice.is_paused():
+                    continue
+
+                await voice.disconnect()
 
     @client.command(pass_context=True)
     async def play(ctx):
@@ -93,6 +101,13 @@ def run_discord_bot():
             voice = await channel.connect()
             source = FFmpegPCMAudio('audio/Intro.wav')
             player = voice.play(source)
+
+            while True:
+                await asyncio.sleep(1)
+                if voice.is_playing() or voice.is_paused():
+                    continue
+
+                await voice.disconnect()
 
         else:
             await ctx.send('Non sei connesso a nessun canale vocale.')
