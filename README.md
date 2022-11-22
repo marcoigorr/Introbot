@@ -5,3 +5,12 @@ Discord Bot programmato con python
 ## Obbiettivo
 
 Intro per l'entrata di Emer in chat vocale
+
+## Dipendenze
+
+- python > 3.8
+
+  - discord
+  - dotenv
+  - FFmpegPCMAudio
+  - os
