@@ -3,6 +3,7 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 from discord import FFmpegPCMAudio
+from datetime import datetime
 
 import responses
 
@@ -20,7 +21,7 @@ class Colors:
 
 
 def log(label):
-    print(f'{Colors.CYAN}[+]{Colors.END} ' + label)
+    print(f'{Colors.HEADER}{datetime.now().strftime("%H:%M:%S")} {Colors.CYAN}[+]{Colors.END} ' + label)
 
 
 async def send_message(message):
